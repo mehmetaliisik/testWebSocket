@@ -46,18 +46,22 @@ class _WebSocketLed extends State<WebSocketLed> {
       channel?.stream.listen(
         (message) {
           print(message);
-          if (message == "connected") {
-            connected = true; //message is "connected" from NodeMCU
-          } else if (message == "poweron:success") {
-            ledstatus = true;
-          } else if (message == "poweroff:success") {
-            ledstatus = false;
-          }
+          setState(() {
+            if (message == "connected") {
+              connected = true; //message is "connected" from NodeMCU
+            } else if (message == "poweron:success") {
+              ledstatus = true;
+            } else if (message == "poweroff:success") {
+              ledstatus = false;
+            }
+          });
         },
         onDone: () {
           //if WebSocket is disconnected
           print("Web socket is closed");
-          connected = false;
+          setState(() {
+            connected = false;
+          });
         },
         onError: (error) {
           print(error.toString());
